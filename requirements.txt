@@ -1,0 +1,5 @@
+plotly
+dspy
+streamlit
+newsapi-python
+crawl4ai
