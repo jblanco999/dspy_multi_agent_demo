@@ -78,10 +78,10 @@ class news_consolidation(dspy.Module):
         i = 0
         while i < len(article_content):
         # while i < 2:
-        time.sleep(30)
-        next_agent = self.article_topic_assessment(article_details=article_content[i])
-        print(next_agent)
-        time.sleep(30)
+            time.sleep(30)
+            next_agent = self.article_topic_assessment(article_details=article_content[i])
+            print(next_agent)
+            time.sleep(30)
             if next_agent.transfer_agent_name == 'other_agent':
                 result = self.other_agent(article_url=article_content[i]['url'])
                 article_content[i]['topic'] = 'other'
@@ -119,7 +119,6 @@ class news_consolidation(dspy.Module):
                 article_content[i]['summary_and_assessment'] = result.summary_assessment
                 print(result)
                 i+=1
-            time.sleep(40)
         return article_content
 
 def get_news():
