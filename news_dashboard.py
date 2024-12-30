@@ -44,7 +44,10 @@ def load_data():
     with open('output.json', 'r') as f:
         data = json.load(f)
     sample_data = data
-    return pd.DataFrame(sample_data)
+    df = pd.DataFrame(sample_data)
+    df['date'] = pd.to_datetime(df['date'])
+    df['clean_date'] = df['date'].dt.strftime('%Y-%m-%d')
+    return df
 
 
 def get_bias_category(bias):
@@ -67,6 +70,24 @@ def main():
 
     # Sidebar filters
     st.sidebar.title("Filters")
+
+    # Date filter
+    st.sidebar.subheader("Date Range")
+    min_date = df['date'].min().date()
+    max_date = df['date'].max().date()
+
+    start_date = st.sidebar.date_input(
+        "Start date",
+        min_date,
+        min_value=min_date,
+        max_value=max_date
+    )
+    end_date = st.sidebar.date_input(
+        "End date",
+        max_date,
+        min_value=min_date,
+        max_value=max_date
+    )
 
     # Sentiment filter
     selected_sentiments = st.sidebar.multiselect(

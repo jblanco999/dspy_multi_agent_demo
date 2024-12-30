@@ -78,8 +78,10 @@ class news_consolidation(dspy.Module):
         i = 0
         while i < len(article_content):
         # while i < 2:
-            next_agent = self.article_topic_assessment(article_details=article_content[i])
-            print(next_agent)
+        time.sleep(30)
+        next_agent = self.article_topic_assessment(article_details=article_content[i])
+        print(next_agent)
+        time.sleep(30)
             if next_agent.transfer_agent_name == 'other_agent':
                 result = self.other_agent(article_url=article_content[i]['url'])
                 article_content[i]['topic'] = 'other'
@@ -117,14 +119,28 @@ class news_consolidation(dspy.Module):
                 article_content[i]['summary_and_assessment'] = result.summary_assessment
                 print(result)
                 i+=1
-            time.sleep(20)
+            time.sleep(40)
         return article_content
 
 def get_news():
     newsapi = NewsApiClient(api_key='7b0a505552c34422a83e27dd7bfec465')
 
-    top_headlines = newsapi.get_top_headlines(sources='bbc-news,the-verge,abc-news,cnn',
-                                              page_size=50,)
+    url = "https://newsapi.org/v2/everything"
+    api_key = "7b0a505552c34422a83e27dd7bfec465"
+
+    params = {
+        "q": "all",  # Your search query
+        "from": "2024-12-29",  # Start date
+        "to": "2024-12-29",  # End date
+        "sortBy": "publishedAt",  # Sort by publication date
+        "language": "en",  # Article language
+        "sources": 'bbc-news,the-verge,abc-news,cnn,yahoo,vox,cbs-news,fox-news',
+        "apiKey": api_key
+    }
+
+    response = requests.get(url, params=params)
+    top_headlines = response.json().get("articles", [])
+    top_headlines = top_headlines[0:50]
 
     return top_headlines
 
@@ -140,11 +156,11 @@ def main():
     i = 0
     article_content = []
     top_headlines = get_news()
-    while i < len(top_headlines['articles']):
-        title = top_headlines['articles'][i]['title']
-        url = top_headlines['articles'][i]['url']
-        content = top_headlines['articles'][i]['content']
-        date = top_headlines['articles'][i]['publishedAt']
+    while i < len(top_headlines):
+        title = top_headlines[i]['title']
+        url = top_headlines[i]['url']
+        content = top_headlines[i]['content']
+        date = top_headlines[i]['publishedAt']
         article_content.append({'title': title, 'url': url, 'content': content, 'date': date})
         i += 1
     print(f"Total Articles: {len(article_content)}\n\n")
