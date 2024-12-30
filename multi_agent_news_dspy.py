@@ -122,10 +122,10 @@ class news_consolidation(dspy.Module):
         return article_content
 
 def get_news():
-    newsapi = NewsApiClient(api_key='7b0a505552c34422a83e27dd7bfec465')
+    newsapi = NewsApiClient(api_key='')
 
     url = "https://newsapi.org/v2/everything"
-    api_key = "7b0a505552c34422a83e27dd7bfec465"
+    api_key = ""
 
     params = {
         "q": "all",  # Your search query
